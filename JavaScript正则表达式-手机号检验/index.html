@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则表达式应用--电话号码检验</title>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" id="username" onblur="checkUsernaem()"></td>
+            <td id="user_msg">长度6-13位，第一个必须是字母，其他只能是数字跟字母</td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="text" id="password" onblur="checkPassword()"></td>
+            <td id="pwd_msg">英语字母和数字组成4-16位</td>
+        </tr>
+        <tr>
+            <td>确认密码</td>
+            <td><input type="text" id="repawd" onblur="checkRepwd()"></td>
+            <td id="repwd_msg">英语字母和数字组成4-16位</td>
+        </tr>
+        <tr>
+            <td>电话号码</td>
+            <td><input type="text" id="mobile" onblur="checkphone()"></td>
+            <td id="phone_msg">请输入电话号码</td>
+        </tr>
+        <tr>
+            <td>邮箱</td>
+            <td><input type="text" id="email" onblur="checkemail()"></td>
+            <td id="email_msg">请输入邮箱</td>
+        </tr>
+
+    </table>
+
+    <script>
+        //用户名
+        function checkUsernaem() {
+            //用户名文本框中的内容
+            var username = document.getElementById('username').value
+            var user_msg = document.getElementById('user_msg')
+            //正则表达式
+            //长度6-13位，第一个必须是字母，其他只能是数字跟字母
+
+            var userReg = /^[a-zA-Z][a-zA-Z0-9]{5,13}$/
+
+            if (username != "") {
+                //判断用户名是否为空
+                if (userReg.test(username)) {
+                    //校验正则表达式
+                    user_msg.innerHTML = "<span style='color:green;'>验证成功</span>"
+                } else {
+                    user_msg.innerHTML = "<span style='color:red;'>长度6-13位，第一个必须是字母，其他只能是数字跟字母</span>"
+                }
+            } else {
+                user_msg.innerHTML = "<span style='color:red;'>用户名不能为空</span>"
+            }
+
+        }
+
+
+        //密码
+        function checkPassword() {
+
+            var password = document.getElementById('password').value
+            var pwd_msg = document.getElementById('pwd_msg')
+            //正则表达式
+            //英语字母和数字组成4-16位
+            var userpwd = /^[a-zA-Z0-9]{4,16}$/
+
+            if (password != "") {
+                //判断密码是否为空
+                if (userpwd.test(password)) {
+                    pwd_msg.innerHTML = "<span style='color:green;'>验证成功</span>"
+
+                } else {
+                    pwd_msg.innerHTML = "<span style='color:red;'>英语字母和数字组成4-16位</span>"
+                }
+            } else {
+                pwd_msg.innerHTML = "<span style='color:red;'>密码不能为空</span>"
+            }
+
+        }
+
+        //确认密码
+        function checkRepwd() {
+            var repawd = document.getElementById('repawd').value
+            var password = document.getElementById('password').value
+            var repwd_msg = document.getElementById('repwd_msg')
+            //正则表达式
+            //英语字母和数字组成4-16位
+
+            var userrepwd = /^[a-zA-Z0-9]{4,16}$/
+
+            if (userrepwd.test(repawd)) {
+                // repwd_msg.innerHTML="<span style='color:green;'>输入正确</span>"
+                if (password == repawd) {
+                    repwd_msg.innerHTML = "<span style='color:green;'>密码一致</span>"
+                } else {
+                    repwd_msg.innerHTML = "<span style='color:red;'>两次密码不一致，请重试</span>"
+                }
+            } else {
+                repwd_msg.innerHTML = "<span style='color:red;'>请输入密码</span>"
+                // repwd_msg.innerHTML= "<span style='color:blue;'>密码錯誤</span>"
+            }
+
+        }
+
+        //电话号码
+        function checkphone() {
+            var mobile = document.getElementById('mobile').value
+            var phone_msg = document.getElementById('phone_msg')
+            //正则表达式
+            var telephone = /^1[3456789]\d{9}$/
+
+            //判断电话号码是否为空
+            if (mobile != "") {
+                if (telephone.test(mobile)) {
+                    phone_msg.innerHTML = "<span style='color:green;'>手机号码正确</span>"
+                } else {
+                    phone_msg.innerHTML = "<span style='color:red;'>手机格式不正确</span>"
+                }
+            } else {
+                phone_msg.innerHTML = "<span style='color:red;'>手机号码不能为空</span>"
+            }
+
+        }
+
+        //邮箱
+        function checkemail() {
+            var email = document.getElementById('email').value
+            var email_msg = document.getElementById('email_msg')
+            //正则表达式
+            var youxiang = /^\w{3,10}\@\.com$/
+
+            if (email != "") {
+                //判断邮箱是否为空
+                if (youxiang.test(email)) {
+                    email_msg.innerHTML = "<span style='color:green;'>邮箱格式正确</span>"
+                } else {
+                    email_msg.innerHTML = "<span style='color:red;'>邮箱格式错误，请重试 例：aaa@.com</span>"
+                }
+            } else {
+                email_msg.innerHTML = "<span style='color:red;'>邮箱不能为空</span>"
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
