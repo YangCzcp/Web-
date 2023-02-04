@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+
+    <script>
+    let anim = {
+      //1.初始化  （序号表示执行步骤）
+      init(){
+        this.oC = document.querySelector('canvas');
+        this.ctx = this.oC.getContext('2d');
+        this.maxParticle = 100; //规定的最大粒子数
+        this.particle = []; //存储粒子
+
+        this.letters  = "我喜欢你我爱你";
+        this.resize() //设置canvas的宽高
+        //自适应宽高 给window绑定监听触发函数resize  //通过箭头函数执行外面的resize
+        window.addEventListener('resize', ()=>this.resize())
+
+        this.loop();  //不断的调用
+      },
+      //自适应宽高 
+      resize(){ //设置canvas的宽高
+        //获取浏览器窗口的宽高
+        this.oC.width = window.innerWidth;
+        this.oC.height = window.innerHeight;
+        //页面的宽高
+        this.w = window.innerWidth;
+        this.h = window.innerHeight;
+      },
+      //2不停渲染粒子
+      loop(){ 
+        this.render();  //不停执行render方法
+        requestAnimationFrame(this.loop.bind(this))
+      },
+      //3渲染 //之后就是一直 3 - 4 - 5 - 6 循环执行
+      render() {  //不停执行render方法
+        this.fade();  //给画布来一层透明度覆盖
+        this.particle.push({  //给粒子存放数组particle内添加粒子 每个粒子都是一个许多变量组成的对象
+          x:this.w/2, //粒子起始位置
+          y:this.h,
+          xSpeed:(Math.random()*20)-10,  //例子的x方向数度[-10,10]
+          ySpeed:(Math.random()*20)-10,  //例子的y方向数度[-10,10]
+          //在letters数组内随机获取喷出的字   Math.foor向下取整
+          font:this.letters[Math.floor(Math.random()*this.letters.length)],
+          //[色相0~360, 饱和度0%~100%, 亮度0~100%, 透明度0~1]
+          color:[0,90,80,0.8]
+        })
+        this.drawParticles()  //画粒子
+        this.clearParticle(); //删除旧粒子
+      },
+      //5.画粒子
+      drawParticles(){
+        for(let i=0; i<this.particle.length; i++){
+          let particle = this.particle[i];  //获取每一个字
+          //h色相0~360, s饱和度0%~100%, l亮度0~100%, a透明度0~1
+          let h = particle.color[0],
+              s = particle.color[1] + "%",
+              l = particle.color[2] + "%",
+              a = particle.color[3];
+          let hsla = `hsla(${h},${s},${l},${a})`;
+          this.ctx.font = "20px 宋体";   //字体大小
+          this.ctx.fillStyle = hsla;  //渲染颜色
+
+          //给canvas画布添加字体   (字体类型, 字体在画布上的x，y位置)
+          this.ctx.fillText( particle.font, particle.x-10, particle.y )
+          //改变字体位置
+          particle.x += particle.xSpeed;  //字体的位置通过每次的+=数度值从而改变
+          particle.y += particle.ySpeed;
+          particle.y *=0.98;  //字体在y方向的衰减值
+
+          particle.color[0] +=1;  //颜色的变化
+          particle.color[2] *=0.99; //
+
+          if(particle.color[0] > 299){  //当色相值达到299时
+            particle.color[2] =100; //亮度最大
+            particle.color[3] =1;   //透明度为1
+          }
+        }
+      },
+      //4.每次都给cnavas覆盖上一层淡淡的透明层，给文字降低透明度
+      fade(){ 
+        this.ctx.fillStyle = "rgba( 0,0,0,0.1 )"
+        this.ctx.fillRect( 0,0,this.w,this.h )  //覆盖整个画布
+      },
+      //6.清除旧文字
+      clearParticle(){
+        //判断是否大于最大值
+        if( this.particle.length >this.maxParticle ){
+          //将前面生成的文字删除
+          this.particle.shift();  //shift清除数组的第一个元素
+        }
+      }
+
+    }
+
+    anim.init();  //开始程序
+  
+    </script>
+
+</body>
+
+</html>
